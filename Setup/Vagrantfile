@@ -1,0 +1,45 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+	config.ssh.insert_key = false
+	config.vbguest.auto_update = true
+  config.vm.box_check_update = false
+
+  # create webserver
+	config.vm.define "web" do |web_config|
+      web_config.vm.box = "ubuntu/trusty64"
+      web_config.vm.hostname = "webserver"
+      web_config.vm.network "private_network", ip: "192.168.50.10"
+      web_config.vm.synced_folder "website", "/home/vagrant/website"
+      web_config.vm.provider "virtualbox" do |vb|
+      	vb.name = "webserver"
+      	opts = ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      	vb.customize opts
+      	vb.memory = "1024"
+      end
+      web_config.vm.provision "shell", path: "bootstrap-webserver.sh"
+	end
+
+
+  # create some clients
+  # https://docs.vagrantup.com/v2/vagrantfile/tips.html
+  (1..1).each do |i|
+    config.vm.define "client#{i}" do |node|
+        node.vm.box = "ubuntu/trusty64"
+        node.vm.hostname = "client#{i}"
+        node.vm.network "private_network", ip: "192.168.50.#{20+i}"
+        node.vm.synced_folder "client", "/home/vagrant/client"
+        node.vm.provider "virtualbox" do |vb|
+        	vb.gui = true
+        	vb.name = "client#{i}"
+      		opts = ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      		vb.customize opts
+      		vb.memory = "2048"
+        end
+        node.vm.provision "shell", path: "bootstrap-client.sh"
+    end
+  end # of loop
+
+end
