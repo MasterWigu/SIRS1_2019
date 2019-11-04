@@ -7,4 +7,9 @@ cp -f /home/vagrant/website/nginx.conf /etc/nginx/nginx.conf
 cp -f /home/vagrant/website/default-site /etc/nginx/sites-available/default
 cp -f /home/vagrant/website/index.html /usr/share/nginx/html/index.html
 
+echo 'mysql-server mysql-server/root_password password toor' | debconf-set-selections
+echo 'mysql-server mysql-server/root_password_again password toor' | debconf-set-selections
+
+apt-get -y install mysql-server
+
 service nginx restart
