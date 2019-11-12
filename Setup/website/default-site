@@ -1,8 +1,17 @@
 server {
-    listen 80;
+    listen         80;
+    server_name    ScoreboardServer;
+    return         301 https://192.168.50.10$request_uri;
+    }
+
+
+server {
+    listen 443 ssl;
     root /var/www/html;
-    index index.php index.html index.htm index.nginx-debian.html;
+    index index.php index.html;
     server_name ScoreboardServer;
+    ssl_certificate     /home/vagrant/httpsCert/server.crt;
+    ssl_certificate_key /home/vagrant/httpsCert/privatekey.pem;
 
     location / {
             try_files $uri $uri/ =404;
