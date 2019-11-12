@@ -1,27 +1,19 @@
 server {
+    listen 80;
+    root /var/www/html;
+    index index.php index.html index.htm index.nginx-debian.html;
+    server_name ScoreboardServer;
 
-	listen 80;
-	server_name ScoreboardServer;
-	root /usr/share/nginx/html;
-	index index.html index.htm;
+    location / {
+            try_files $uri $uri/ =404;
+    }
 
-	location / {
-		try_files $uri $uri/ = 404;
-	}
+    location ~ \.php$ {
+            include snippets/fastcgi-php.conf;
+            fastcgi_pass unix:/var/run/php/php7.3-fpm.sock;
+    }
 
-	location ~ \.php$ {
-			include snippets/fastcgi-php.conf;
-			fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
-	}
-
-	error_page 404 /404.html;
-	error_page 500 502 503 504 /50x.html;
-	location = /50x.html {
-		root /usr/share/nginx/html;
-	}
-
-	location ~ /\.ht {
-			deny all;
-	}
-
+    location ~ /\.ht {
+            deny all;
+    }
 }
