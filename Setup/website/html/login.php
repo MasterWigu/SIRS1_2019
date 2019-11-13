@@ -1,5 +1,4 @@
 <?php
-    echo "string0 <br>";
     session_start();
     $DB_HOST = 'localhost';
     $DB_USER = 'root';
@@ -10,43 +9,37 @@
         die ('Connection failed: ' . mysqli_connect_error());
     }
 
-    //******
+    if ($stmt = $connection->prepare('SELECT password FROM user WHERE username = ?')) {
+      if (!$stmt->bind_param("s", $username)) {
+           echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+      }
+      $username = $_POST['username'];
+      $password = $_POST['password'];
 
-    echo "string1 <br>";
-    $arr = [];
-    $stmt0 = $mysqli->prepare("SELECT * FROM user");
-    echo "hi";
-    if (!$stmt0) echo 'failed to run';
-    $stmt0->execute();
-    $result = $stmt0->get_result();
-    while($row = $result->fetch_assoc()) {
-      $arr[] = $row;
-    }
-    if(!$arr) exit('No rows');
-    var_export($arr);
-    $stmt0->close();
+      if (!$stmt->execute()) {
+          echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+      }
 
-    //**********
-    echo "string2";
-    if ($stmt = $connection->prepare('SELECT username, password FROM user WHERE username = ? and password = ?')) {
-        if ($stmt->num_rows > 0) {
-          if (!$stmt->bind_result($username, $password)) {
-               echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+      echo "AAAA" . $stmt->num_rows . "BBB";
+      $result = $stmt->get_result();
+      if ($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+          if (!password_verify($password, $row['password'])) {
+            echo 'Wrong password, try again.';
+          } else {
+            $_SESSION['loggedin'] = TRUE;
+            $_SESSION['username'] = $username;
+            echo 'Welcome ' . $_SESSION['name'] . '!';
           }
-          if (!$stmt->execute()) {
-              echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
-          }
-          $_SESSION['loggedin'] = TRUE;
-		      $_SESSION['username'] = $username;
-          echo 'Welcome ' . $_SESSION['name'] . '!';
-        } else {
-            echo 'Incorrect, try again.';
+          break;
         }
+
+      } else {
+        echo 'Invalid username, try again.';
+      }
     } else {
         echo "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
     }
-    session_close();
-    $stmt->close();
-?>
 
-// *****************************************************************
+    $connection->close();
+?>
