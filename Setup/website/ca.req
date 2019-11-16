@@ -1,0 +1,63 @@
+Certificate Request:
+    Data:
+        Version: 1 (0x0)
+        Subject: C=PT, ST=Lisbon, L=Oeiras, O=IST_SIRS2019, OU=Proj, CN=scoreboardCustom/emailAddress=mail@mail.mail
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+                Modulus:
+                    00:e5:37:b2:29:ac:41:99:b3:a0:7c:61:ce:0c:87:
+                    5a:93:30:21:ab:90:6b:af:1e:12:87:ef:ca:d4:3a:
+                    76:5f:53:20:03:d9:03:35:fc:c6:fb:f8:d5:e4:f8:
+                    de:37:d3:85:c3:b7:78:e9:82:b1:eb:fc:0e:96:34:
+                    ac:b9:a4:94:20:e1:20:4d:88:9f:37:fb:23:fa:bf:
+                    bf:f2:de:be:62:01:80:7a:aa:6e:87:1b:42:f9:35:
+                    8e:22:ca:d3:ed:fa:bf:bb:10:95:cf:fa:7e:50:a2:
+                    d7:ea:83:bf:bc:ca:d8:73:f1:06:4c:21:6d:68:28:
+                    4e:ca:f6:61:b5:ab:7a:4e:28:a7:82:87:df:8b:47:
+                    c4:57:df:ac:ff:58:39:9d:5d:0c:cc:96:6f:33:76:
+                    b8:d4:a6:4a:58:46:3a:12:c8:0a:7c:ce:65:1f:85:
+                    18:51:79:e2:0b:b2:11:3e:d0:44:6f:7e:f1:31:68:
+                    7d:0c:44:ef:ef:8e:bd:b0:62:e0:65:a1:6a:30:0b:
+                    0f:04:74:49:e7:bd:60:42:12:59:f2:10:48:a2:1a:
+                    c3:ff:2c:70:6e:d7:2c:54:19:5d:d8:2e:ad:8d:41:
+                    2b:fa:25:02:3b:2b:1b:b2:92:f1:09:84:b4:50:11:
+                    69:c0:e9:70:07:e6:b0:fb:dd:cd:cf:4d:2b:fe:2d:
+                    ea:fd
+                Exponent: 65537 (0x10001)
+        Attributes:
+            a0:00
+    Signature Algorithm: sha256WithRSAEncryption
+         c0:50:2b:bf:1e:61:71:f2:16:95:45:8b:67:89:a5:2c:b1:d6:
+         f5:60:30:f9:7a:ad:b3:e0:c8:20:9f:d0:50:86:d4:c8:9c:40:
+         f8:11:f7:b8:60:c6:e0:06:06:7e:f7:ad:72:03:ee:65:eb:6a:
+         fb:74:39:26:61:4b:f3:77:8c:fb:b2:0e:bb:f2:0a:eb:69:15:
+         bb:88:df:74:09:95:95:64:79:b1:ff:35:71:41:c5:ed:13:e5:
+         80:cf:c5:da:96:08:1b:a1:9a:87:3a:51:43:67:90:e4:76:19:
+         52:81:41:4e:cc:2e:cc:95:ea:16:84:ff:c2:ba:f9:fe:1d:f9:
+         77:72:05:cf:f9:d9:f3:31:a1:85:79:af:e1:23:10:28:29:06:
+         40:2c:04:f9:03:cf:60:9f:26:88:16:21:e0:4c:ba:3d:6a:fb:
+         14:22:9d:eb:ff:14:77:7b:d9:24:0b:07:a4:b9:91:71:27:37:
+         23:33:5a:e4:91:7f:66:98:03:fa:af:45:24:56:c9:b1:f2:1d:
+         a2:e0:7a:42:86:86:4c:44:5e:d2:04:b8:7c:8d:e2:cb:76:fd:
+         9f:0c:c8:9a:17:07:c5:05:01:98:96:48:27:32:26:46:03:89:
+         54:02:c0:e3:3f:9a:b0:1d:24:b1:91:fc:9d:97:4c:f6:26:cc:
+         d0:6a:f0:23
+-----BEGIN CERTIFICATE REQUEST-----
+MIIC1TCCAb0CAQAwgY8xCzAJBgNVBAYTAlBUMQ8wDQYDVQQIDAZMaXNib24xDzAN
+BgNVBAcMBk9laXJhczEVMBMGA1UECgwMSVNUX1NJUlMyMDE5MQ0wCwYDVQQLDARQ
+cm9qMRkwFwYDVQQDDBBzY29yZWJvYXJkQ3VzdG9tMR0wGwYJKoZIhvcNAQkBFg5t
+YWlsQG1haWwubWFpbDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAOU3
+simsQZmzoHxhzgyHWpMwIauQa68eEofvytQ6dl9TIAPZAzX8xvv41eT43jfThcO3
+eOmCsev8DpY0rLmklCDhIE2Inzf7I/q/v/LevmIBgHqqbocbQvk1jiLK0+36v7sQ
+lc/6flCi1+qDv7zK2HPxBkwhbWgoTsr2YbWrek4op4KH34tHxFffrP9YOZ1dDMyW
+bzN2uNSmSlhGOhLICnzOZR+FGFF54guyET7QRG9+8TFofQxE7++OvbBi4GWhajAL
+DwR0See9YEISWfIQSKIaw/8scG7XLFQZXdgurY1BK/olAjsrG7KS8QmEtFARacDp
+cAfmsPvdzc9NK/4t6v0CAwEAAaAAMA0GCSqGSIb3DQEBCwUAA4IBAQDAUCu/HmFx
+8haVRYtniaUssdb1YDD5eq2z4Mggn9BQhtTInED4Efe4YMbgBgZ+961yA+5l62r7
+dDkmYUvzd4z7sg678grraRW7iN90CZWVZHmx/zVxQcXtE+WAz8XalggboZqHOlFD
+Z5DkdhlSgUFOzC7MleoWhP/Cuvn+Hfl3cgXP+dnzMaGFea/hIxAoKQZALAT5A89g
+nyaIFiHgTLo9avsUIp3r/xR3e9kkCwekuZFxJzcjM1rkkX9mmAP6r0UkVsmx8h2i
+4HpChoZMRF7SBLh8jeLLdv2fDMiaFwfFBQGYlkgnMiZGA4lUAsDjP5qwHSSxkfyd
+l0z2JszQavAj
+-----END CERTIFICATE REQUEST-----

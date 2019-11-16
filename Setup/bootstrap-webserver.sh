@@ -28,6 +28,9 @@ update-alternatives --set php /usr/bin/php7.3
 nginx -s reload
 systemctl reload nginx
 
+pip install cryptography
+pip install mysql-connector
+
 #create certificates
 cd /home/vagrant/
 mkdir httpsCert
