@@ -28,8 +28,16 @@ update-alternatives --set php /usr/bin/php7.3
 nginx -s reload
 systemctl reload nginx
 
-pip install cryptography
-pip install mysql-connector
+
+apt-get -y install python3
+apt-get -y install python3-pip
+pip3 install cryptography
+pip3 install mysql-connector
+pip3 install bcrypt
+
+
+
+
 
 #create certificates
 cd /home/vagrant/
@@ -50,3 +58,7 @@ openssl genrsa -out privatekey.pem
 openssl req -new -x509 -key privatekey.pem -out publickey.cer -days 365 -subj "/C=PT/ST=Lisbon/L=Oeiras/O=IST_SIRS2019/OU=Proj/CN=scoreboardCustom/emailAddress=mail@mail.mail"
 openssl x509 -x509toreq -days 365 -in publickey.cer -signkey privatekey.pem -out ca.req
 openssl x509 -req -days 365 -in ca.req -signkey privatekey.pem -out server.crt
+
+
+cp -f /home/vagrant/website/customServer.py /home/vagrant/customCert/customServer.py
+python3 /home/vagrant/customCert/customServer.py &
