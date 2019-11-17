@@ -60,13 +60,14 @@
                   while($row = $result->fetch_assoc()){
                       $name   = $row['username'];
                       $points = $row['points'];
+                      $_SESSION['name'] = $name; # this doesnt work overwrite
                       echo '<tr>';
-                      echo '<th>' . $name . '</th>';
+                      echo '<a href="userInfo.php"><th>' . $name . '</th>';
+                      echo '</a>';
                       echo '<th>' . $points . '</th>';
                       echo '</tr>';
                   }
                 }
-
               }
               break;
             }
