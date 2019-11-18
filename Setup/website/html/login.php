@@ -1,14 +1,21 @@
+<?php
+  session_start();
+?>
 <!DOCTYPE html>
 <html>
   <head>
   </head>
   <body>
     <?php
-        session_start();
         $DB_HOST = 'localhost';
         $DB_USER = 'root';
         $DB_PASS = 'toor';
         $DB_NAME = 'AVD_SCORE';
+        if ($_POST['username'] === '') {
+          echo "You have to login first!";
+          die(0);
+        }
+
         $connection = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
         if ( !$connection ) {
             die ('Connection failed: ' . mysqli_connect_error());
@@ -60,10 +67,8 @@
                   while($row = $result->fetch_assoc()){
                       $name   = $row['username'];
                       $points = $row['points'];
-                      $_SESSION['name'] = $name; # this doesnt work overwrite
                       echo '<tr>';
-                      echo '<a href="userInfo.php"><th>' . $name . '</th>';
-                      echo '</a>';
+                      echo '<th><a href="/userInfo.php?name='.$name.'">'. $name . '</a></th>';
                       echo '<th>' . $points . '</th>';
                       echo '</tr>';
                   }
