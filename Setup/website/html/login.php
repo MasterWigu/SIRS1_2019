@@ -41,42 +41,10 @@
               } else {
                 $_SESSION['loggedin'] = TRUE;
                 $_SESSION['username'] = $username;
-
-                echo '<div id="header" style="overflow: hidden; padding: 20px 10px; background-color: #f1f1f1;">';
-                echo '<div id="header-left" style="background-color: #f1f1f1; float: left; color: #23a9cf;">';
-                echo '<h1 style="text-align:center;"> Welcome ' . $_SESSION['username'] . '! </h1>';
-                echo '</div>';
-
-                echo '<div id="header-right" style="background-color: #f1f1f1; float: right; text-align:center">';
-                echo '<a href="logout.php" style="padding: 20px 0px; text-decoration:none; color:#7d1e1e; margin-top:auto; margin-bottom:auto">Logout</a>';
-                echo '</div>';
-                echo '</div>';
-
-                echo '<h2 style="text-align:center;color: olivedrab"> Team users </h2>';
-
-                if ($stmt = $connection->prepare('SELECT * FROM user')) {
-                  if (!$stmt->execute()) {
-                      echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
-                  }
-                  $result = $stmt->get_result();
-                  echo '<table border="5" style="width:70%; margin-left:auto;margin-right:auto;">';
-                  echo '<tr>';
-                  echo '<th> Username </th>';
-                  echo '<th> Points </th>';
-                  echo '</tr>';
-                  while($row = $result->fetch_assoc()){
-                      $name   = $row['username'];
-                      $points = $row['points'];
-                      echo '<tr>';
-                      echo '<th><a href="/userInfo.php?name='.$name.'">'. $name . '</a></th>';
-                      echo '<th>' . $points . '</th>';
-                      echo '</tr>';
-                  }
-                }
+                header('location: loginRedirect.php');
               }
               break;
             }
-
           } else {
             echo 'Invalid username, try again.';
             echo '<br><br><input type="button" value="Back" onclick="history.back(-1)"/>';

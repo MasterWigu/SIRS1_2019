@@ -36,6 +36,7 @@ session_start();
           echo '</div>';
           echo '</div>';
 
+          echo '<p><form action="loginRedirect.php" method="POST"><input type="submit" value="Back"></form>';
           if ($name == $_SESSION['username'] || $perm === 0) {
             echo '<h2 style="text-align:center;color: olivedrab"> Submitted vulnerabilities </h2>';
 
@@ -71,6 +72,6 @@ session_start();
         echo "You have to login first!";
       }
     ?>
-    <form action="login.php" method="POST"><input type="submit" value="Back"></p></form>
+
   </body>
 </html>
