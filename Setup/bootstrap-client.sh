@@ -1,12 +1,22 @@
 #!/usr/bin/env bash
 
+apt-get update
 apt-get -y install dictionaries-common
 apt-get -y install xfce4
+apt-get -y install xfce-desktop
 apt-get -y install firefox
 apt-get -y install python3
 apt-get -y install python3-pip
 apt-get -y install python3-dev libffi-dev build-essential virtualenvwrapper
 pip3 install virtualenvwrapper
-source "/usr/bin/virtualenvwrapper.sh"
 export WORKON_HOME="/opt/virtual_env/"
-mkvirtualenv --python=$(which python3) angr && python3 -m pip install angr
+
+echo "source /usr/local/bin/virtualenvwrapper.sh" >> /home/vagrant/.bashrc
+source "/usr/local/bin/virtualenvwrapper.sh"
+source /home/vagrant/.bashrc
+su vagrant
+source "/usr/local/bin/virtualenvwrapper.sh"
+source /home/vagrant/.bashrc
+touch /home/vagrant/.config/xfce4/xinitrc
+cat /etc/xdg/xfce4/xinitrc > /home/vagrant/.config/xfce4/xinitrc 
+

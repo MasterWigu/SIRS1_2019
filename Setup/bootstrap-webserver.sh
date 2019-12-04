@@ -36,9 +36,6 @@ pip3 install mysql-connector
 pip3 install bcrypt
 
 
-
-
-
 #create certificates
 cd /home/vagrant/
 mkdir httpsCert
