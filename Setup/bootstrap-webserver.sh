@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+
+cp -f /home/vagrant/website/interfaces_web.yaml /etc/netplan/60-gateway.yaml
+netplan apply
+
+
 # install nginx
 apt-get -y install nginx
 

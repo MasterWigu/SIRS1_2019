@@ -1,0 +1,1 @@
+startx /usr/bin/startxfce4

@@ -23,13 +23,30 @@ Vagrant.configure("2") do |config|
 	end
 
 
+
+  # create firewall
+  config.vm.define "firewall" do |fire_config|
+      fire_config.vm.box = "ubuntu/bionic64"
+      fire_config.vm.hostname = "firewall"
+      fire_config.vm.network "private_network", ip: "192.168.50.2"
+      fire_config.vm.network "private_network", ip: "192.168.52.1"
+      fire_config.vm.synced_folder "firewall", "/home/vagrant/firewall"
+      fire_config.vm.provider "virtualbox" do |vb|
+        vb.name = "firewall"
+        opts = ["modifyvm", :id, "--natdnshostresolver1", "on"]
+        vb.customize opts
+        vb.memory = "1024"
+      end
+      fire_config.vm.provision "shell", path: "bootstrap-firewall.sh"
+  end
+
   # create some clients
   # https://docs.vagrantup.com/v2/vagrantfile/tips.html
   (1..1).each do |i|
     config.vm.define "client#{i}" do |node|
-        node.vm.box = "ubuntu/xenial64"
+        node.vm.box = "ubuntu/bionic64"
         node.vm.hostname = "client#{i}"
-        node.vm.network "private_network", ip: "192.168.50.#{20+i}"
+        node.vm.network "private_network", ip: "192.168.52.#{20+i}"
         node.vm.synced_folder "client", "/home/vagrant/client"
         node.vm.provider "virtualbox" do |vb|
         	vb.gui = true

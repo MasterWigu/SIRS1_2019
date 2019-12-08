@@ -11,12 +11,15 @@ apt-get -y install python3-dev libffi-dev build-essential virtualenvwrapper
 pip3 install virtualenvwrapper
 export WORKON_HOME="/opt/virtual_env/"
 
+cp -f /home/vagrant/client/interfaces_client.yaml /etc/netplan/60-gateway.yaml
+netplan apply
+
 echo "source /usr/local/bin/virtualenvwrapper.sh" >> /home/vagrant/.bashrc
 source "/usr/local/bin/virtualenvwrapper.sh"
 source /home/vagrant/.bashrc
 su vagrant
 source "/usr/local/bin/virtualenvwrapper.sh"
 source /home/vagrant/.bashrc
-touch /home/vagrant/.config/xfce4/xinitrc
-cat /etc/xdg/xfce4/xinitrc > /home/vagrant/.config/xfce4/xinitrc 
 
+
+cp -f /home/vagrant/client/xprofile /home/vagrant/.xprofile
