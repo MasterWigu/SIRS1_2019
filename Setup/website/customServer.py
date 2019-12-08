@@ -16,7 +16,7 @@ with open("privatekey.pem", "rb") as key_file:
 
 serverSocket = socket(AF_INET, SOCK_STREAM)
 serverSocket.bind(('', 4346))
-serverSocket.listen(100)
+serverSocket.listen(1)
 
 while True:
 	print('The server is ready to receive')

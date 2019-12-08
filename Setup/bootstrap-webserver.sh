@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 
-
-cp -f /home/vagrant/website/interfaces_web.yaml /etc/netplan/60-gateway.yaml
-netplan apply
-
-
 # install nginx
 apt-get -y install nginx
 
@@ -64,3 +59,6 @@ openssl x509 -req -days 365 -in ca.req -signkey privatekey.pem -out server.crt
 
 cp -f /home/vagrant/website/customServer.py /home/vagrant/customCert/customServer.py
 python3 /home/vagrant/customCert/customServer.py &
+
+cp -f /home/vagrant/website/interfaces_web.yaml /etc/netplan/60-gateway.yaml
+netplan apply
