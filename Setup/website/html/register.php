@@ -19,7 +19,7 @@
             echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
           }
           $username = $_POST['username'];
-          $password = password_hash($_POST['password'] , PASSWORD_DEFAULT);
+          $password = password_hash($_POST['password'] , PASSWORD_BCRYPT);
 
           if (!$stmt->execute()) {
             echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
