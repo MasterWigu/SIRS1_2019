@@ -41,7 +41,11 @@ After this, when the machines are up, it will open a virtual machine that is the
 login: **vagrant** and password: **vagrant**.
 When logged in just enter the command to initialize the interface
 ```bash
-startxfce4
+cd client
+```
+and then
+```bash
+./gui.sh
 ```
 
 After initializing the interface Xfce, open the Firefox app and open the web site **192.168.50.10**. This will open the scoreboard web interface.
