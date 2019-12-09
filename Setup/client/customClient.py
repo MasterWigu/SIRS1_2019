@@ -6,16 +6,16 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.fernet import Fernet
 
-user = "aaa"
+user = str(input())
 password = "bbb"
-description = "CCC2"
-fingerprint = "DFFAAD2"
+description = "CCC3g3"+user
+fingerprint = "DFFAAD4g4"+user
 
 
 #create an INET, STREAMing socket
 clientSocket = socket(AF_INET, SOCK_STREAM)
 # bind the socket to a public host, and a well-known port
-clientSocket.connect(('192.168.50.10', 4346))
+clientSocket.connect(('192.168.50.10', 4347))
 
 
 #SEND REQUEST
@@ -83,7 +83,7 @@ clientSocket.send(b"VUL_SUBMIT" + token)
 #RECEIVE VULN RESPONSE
 message = clientSocket.recv(4096)
 if (message[:10].decode() == "VUL_DUPLIC"):
-	print("Error: Duplicate vulnetability for user "+ user + ".")
+	print("Error: Duplicate vulnerability for user "+ user + ".")
 	exit(-1) #TODO
 
 if (message[:10].decode() == "VUL_ERROR."):

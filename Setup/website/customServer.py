@@ -1,4 +1,5 @@
 from socket import *
+import threading
 import sys
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
@@ -9,39 +10,50 @@ import bcrypt
 import mysql.connector
 from mysql.connector import Error
 from mysql.connector import errorcode
+from time import strftime
+
+
+
+
 
 with open("privatekey.pem", "rb") as key_file:
 	private_key = serialization.load_pem_private_key(key_file.read(),password=None,backend=default_backend())
 
 
+
+
 serverSocket = socket(AF_INET, SOCK_STREAM)
-serverSocket.bind(('', 4346))
-serverSocket.listen(1)
+serverSocket.bind(('', 4347))
+serverSocket.listen(10)
+setdefaulttimeout(5)
 
-while True:
-	print('The server is ready to receive')
-
-	# Set up a new connection from the client
-	connectionSocket, addr = serverSocket.accept()
-
-
+def new_client(clientSock, addr):
 	try:
+		logFile = open("customServer.log", "a+")
+		logFile.write(strftime("%Y/%m/%d %H:%M:%S")+ " INFO: New connection started\n")
+		logFile.close()
 		#RECEIVE REQUEST
-		message = connectionSocket.recv(4096).decode()
+		message = clientSock.recv(4096).decode()
 		if (message != "NEW_CONNEC"):
-			continue
+			logFile = open("customServer.log", "a+")
+			logFile.write(strftime("%Y/%m/%d %H:%M:%S")+ " ERROR: Wrong packet recieved, expected 'NEW_CONNEC'\n")
+			logFile.close()
+			return
 
 
 		#SEND CERTIFICATE
 		crt = open("server.crt", 'rb')
-		connectionSocket.send("CRT_SEND..".encode() + crt.read())
+		clientSock.send("CRT_SEND..".encode() + crt.read())
 
 
 
 		#RECEIVE SYMMETRIC KEY
-		message = connectionSocket.recv(4096)
+		message = clientSock.recv(4096)
 		if (message[:10].decode() != "SYM_SEND.."):
-			continue
+			logFile = open("customServer.log", "a+")
+			logFile.write(strftime("%Y/%m/%d %H:%M:%S")+ " ERROR: Wrong packet recieved, expected 'SYM_SEND'\n")
+			logFile.close()
+			return
 		symKey = private_key.decrypt(message[10:], padding.OAEP(mgf=padding.MGF1(algorithm=hashes.SHA256()), algorithm=hashes.SHA256(),label=None))
 		
 
@@ -49,13 +61,14 @@ while True:
 		message = b"SYM_ACK..."
 		f = Fernet(symKey)
 		token = f.encrypt(b"SYM_ACK2..")
-		connectionSocket.send(message + token)
-
+		clientSock.send(message + token)
 
 		#RECEIVE LOGIN REQUEST
-		message = connectionSocket.recv(4096)
+		message = clientSock.recv(4096)
 		if (message[:10].decode() != "LOG_REQUES"):
-			continue
+			logFile = open("customServer.log", "a+")
+			logFile.write(strftime("%Y/%m/%d %H:%M:%S")+ " ERROR: Wrong packet recieved, expected 'LOG_REQUES'\n")
+			logFile.close()
 		message = f.decrypt(message[10:])
 		message = message.decode()
 		s1 = message.replace("user:", "").replace("pass:", "").split(";")
@@ -73,30 +86,38 @@ while True:
 		mycursor.close()
 		conn1.close()
 		if myresult == None:
+			logFile = open("customServer.log", "a+")
+			logFile.write(strftime("%Y/%m/%d %H:%M:%S")+ " WARN: User not found trying to login\n")
+			logFile.close()
 			print("User not found")
 			message = b"LOG_WUSER."
 			token = f.encrypt(b"LOG_WUSER2")
-			connectionSocket.send(message + token)
-			continue
+			clientSock.send(message + token)
+			return
 
 		if (not bcrypt.checkpw(password.encode() , myresult[0].encode())):
+			logFile = open("customServer.log", "a+")
+			logFile.write(strftime("%Y/%m/%d %H:%M:%S")+ " WARN: Incorrect password while trying to login\n")
+			logFile.close()
 			print("Wrong password")
 			message = b"LOG_WPASS."
 			token = f.encrypt(b"LOG_WPASS2")
-			connectionSocket.send(message + token)
-			continue
+			clientSock.send(message + token)
+			return
 
 		#SEND LOGIN RESPONSE
 		message = b"LOG_CORREC"
 		m2 = "LOG_CORRE2"+user
 		token = f.encrypt(m2.encode())
-		connectionSocket.send(message + token)
-
+		clientSock.send(message + token)
 
 		#RECEIVE VULNERABILITY
-		message = connectionSocket.recv(4096)
+		message = clientSock.recv(4096)
 		if (message[:10].decode() != "VUL_SUBMIT"):
-			continue
+			logFile = open("customServer.log", "a+")
+			logFile.write(strftime("%Y/%m/%d %H:%M:%S")+ " ERROR: Wrong packet recieved, expected 'VUL_SUBMIT'\n")
+			logFile.close()
+			return
 		message = f.decrypt(message[10:])
 		message = message.decode()
 		s1 = message.replace("fing:", "").replace("desc:", "").split(";")
@@ -116,15 +137,15 @@ while True:
 			cursor.execute(sql, adr)
 			myresult = cursor.fetchone()
 			if myresult == None:
-				print("Error")
+				logFile = open("customServer.log", "a+")
+				logFile.write(strftime("%Y/%m/%d %H:%M:%S")+ " ERROR: Error trying to fetch user points: no user returned\n")
+				logFile.close()
 				conn.close()
-				continue
+				return
 			points = myresult[0]+1
-			print("CCCCC")
 			sql = "UPDATE user SET points = %s WHERE username= %s"
 			adr = (points, user )
 			cursor.execute(sql, adr)
-			print("AAAAA")
 			sql = "INSERT INTO attack (fingerprint, explanation, submit_time, username)  VALUES (%s, %s, NOW(), %s)"
 			adr = (fingerprint, description ,user )
 			cursor.execute(sql, adr)
@@ -139,12 +160,18 @@ while True:
 			if str(error).find("Duplicate entry") != -1:
 				message = b"VUL_DUPLIC"
 				token = f.encrypt(b"VUL_DUPLI2")
-				connectionSocket.send(message + token)
+				clientSock.send(message + token)
+				logFile = open("customServer.log", "a+")
+				logFile.write(strftime("%Y/%m/%d %H:%M:%S")+ " WARN: Trying to submit duplicate vulnerability\n")
+				logFile.close()
 			else:
 				message = b"VUL_ERROR."
 				token = f.encrypt(b"VUL_ERROR2")
-				connectionSocket.send(message + token)
-			continue
+				clientSock.send(message + token)
+				logFile = open("customServer.log", "a+")
+				logFile.write(strftime("%Y/%m/%d %H:%M:%S")+ " ERROR: Error trying to submit vulnerability\n")
+				logFile.close()
+			return
 
 		finally:
 			#closing database connection.
@@ -155,17 +182,35 @@ while True:
 		message = b"VUL_ACCEPT"
 		m2 = "points:"+str(points)
 		token = f.encrypt(m2.encode())
-		connectionSocket.send(message + token)
+		clientSock.send(message + token)
 
+		logFile = open("customServer.log", "a+")
+		logFile.write(strftime("%Y/%m/%d %H:%M:%S")+ " INFO: Vulnerability accepted - user: "+user+"\n")
+		logFile.close()
 		print("VULN ACCEPTED- user:" + user)
 
 
 
 	except IOError:
+			logFile = open("customServer.log", "a+")
+			logFile.write(strftime("%Y/%m/%d %H:%M:%S")+ " ERROR: Socket communication error\n")
+			logFile.close()
 			# Send HTTP response message for file not found
-			connectionSocket.send("HTTP/1.1 404 Not Found\r\n\r\n".encode())
+			clientSock.send("HTTP/1.1 404 Not Found\r\n\r\n".encode())
 			# Close the client connection socket
-			connectionSocket.close()
+			clientSock.close()
+
+
+while True:
+	print('The server is ready to receive')
+
+	# Set up a new connection from the client
+	connectionSocket, addr = serverSocket.accept()
+
+	thread = threading.Thread(target = new_client, args = (connectionSocket, addr))
+	thread.start()
+
+	
 
 serverSocket.close()
 sys.exit()
