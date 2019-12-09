@@ -54,13 +54,16 @@ session_start();
               echo '<tr>';
               echo '<th> Fingerprint </th>';
               echo '<th> Explanation </th>';
+              echo '<th> Submission Time </th>';
               echo '</tr>';
               while($row = $result->fetch_assoc()){
                 $fp      = $row['fingerprint'];
                 $explain = $row['explanation'];
+                $subTime = $row['submit_time'];
                 echo '<tr data-href="url://userInfo.php/">';
                 echo '<th>' . $fp . '</th>';
                 echo '<th>' . $explain . '</th>';
+                echo '<th>' . $subTime . '</th>';
                 echo '</tr>';
               }
             } else {
