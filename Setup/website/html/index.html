@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <title>Scoreborad</title>
     </head>
+    <script src="checkPass.js"></script>
     <body>
         <div style="text-align: center">
             <h1 style="color: olivedrab">Login Scoreboard</h1>
@@ -12,7 +13,7 @@
                 <input type="password" name="password" placeholder="Password" id="password" required>
                 <p><input type="submit" value="Login"></p>
             </form>
-            <form action="register.php" method="POST">
+            <form action="register.php" method="POST" onsubmit="return checkForm(this);">
                 <input type="text" name="username" placeholder="Username" id="username" required>
                 <input type="password" name="password" placeholder="Password" id="password" required>
                 <p><input type="submit" value="Register"></p>
