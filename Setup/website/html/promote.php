@@ -20,16 +20,10 @@
         if ( !$connection ) {
             die ('Connection failed: ' . mysqli_connect_error());
         }
-        
-        $msg = $_GET['message'];
-        if ($msg == 'true')
-          echo 'User added successfully';
-        if ($msg == 'true_')
-          echo 'User removed successfully';
 
         echo '<div id="header" style="overflow: hidden; padding: 20px 10px; background-color: #f1f1f1;">';
         echo '<div id="header-left" style="background-color: #f1f1f1; float: left; color: #23a9cf;">';
-        echo '<h1 style="text-align:center;"> Welcome ' . $_SESSION['username'] . '! </h1>';
+        echo '<h1 style="text-align:center;"> ' . $_SESSION['username'] . ' </h1>';
         echo '</div>';
 
         echo '<div id="header-right" style="background-color: #f1f1f1; float: right; text-align:center">';
@@ -37,26 +31,8 @@
         echo '</div>';
         echo '</div>';
 
-        if ($stmt = $connection->prepare('SELECT permissions FROM user WHERE username=?')) {
-          if (!$stmt->bind_param('s', $userHandler)){
-            echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
-          }
-          $userHandler = $_SESSION['username'];
-          if (!$stmt->execute()) {
-            echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
-          }
-          $result = $stmt->get_result();
-          $row = $result->fetch_assoc();
-          $perm = $row['permissions'];
-          
-          /* Check true leader's password ?*/
-          if ($perm == 0) {
-            echo '<a href="promote.php" style="background-color:#2f66a1; color: white; float:right">Promote leaders</a>';
-          }
-        }
-
-
         echo '<h2 style="text-align:center;color: olivedrab"> Team users </h2>';
+        echo '<h3 style="text-align:center;"> Promote to leader </h3>';
 
         if ($stmt = $connection->prepare('SELECT * FROM user')) {
           if (!$stmt->execute()) {
@@ -66,14 +42,15 @@
           echo '<table border="5" style="width:70%; margin-left:auto;margin-right:auto;">';
           echo '<tr>';
           echo '<th> Username </th>';
-          echo '<th> Points </th>';
+          echo '<th>  </th>';
+          echo '<th>  </th>';
           echo '</tr>';
           while($row = $result->fetch_assoc()){
             $name   = $row['username'];
-            $points = $row['points'];
             echo '<tr>';
-            echo '<th><a href="/userInfo.php?name='.$name.'">'. $name . '</a></th>';
-            echo '<th>' . $points . '</th>';
+            echo '<th>'. $name . '</a></th>';
+            echo '<th><a href="/promoteRedirect.php?name='.$name.'"> Promote </th>';
+            echo '<th><a href="/demoteRedirect.php?name='.$name.'"> Demote </th>';
             echo '</tr>';
           }
         } else {

@@ -19,16 +19,21 @@ session_start();
 
           $name = $_GET['name'];
 
-          if ($stmt = $connection->prepare('SELECT permissions FROM user')) {
+          if ($stmt = $connection->prepare('SELECT permissions FROM user WHERE username=?')) {
+            if (!$stmt->bind_param('s', $userHandler)){
+              echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+            }
+            $userHandler = $_SESSION['username'];
             if (!$stmt->execute()) {
               echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
             }
             $result = $stmt->get_result();
-            $perm = $result->fetch_row()['permissions'];
+            $row = $result->fetch_assoc();
+            $perm = $row['permissions'];
 
           echo '<div id="header" style="overflow: hidden; padding: 20px 10px; background-color: #f1f1f1;">';
           echo '<div id="header-left" style="background-color: #f1f1f1; float: left; color: #23a9cf;">';
-          echo '<h1 style="text-align:center;">' . $_SESSION['username'] .'</h1>';
+          echo '<h1 style="text-align:center;"> Checking ' . $name .'</h1>';
           echo '</div>';
 
           echo '<div id="header-right" style="background-color: #f1f1f1; float: right; text-align:center">';
@@ -37,7 +42,7 @@ session_start();
           echo '</div>';
 
           echo '<p><form action="loginRedirect.php" method="POST"><input type="submit" value="Back"></form>';
-          if ($name == $_SESSION['username'] || $perm === 0) {
+          if ($name == $_SESSION['username'] || $perm == 0) {
             echo '<h2 style="text-align:center;color: olivedrab"> Submitted vulnerabilities </h2>';
 
             if ($stmt = $connection->prepare('SELECT * FROM user')) {

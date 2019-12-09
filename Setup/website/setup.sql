@@ -24,3 +24,5 @@ create table attack(
     constraint pk_attack primary key(fingerprint, username),
     constraint fk_attack foreign key(username) references user(username)
 );
+
+INSERT INTO user VALUES ('admin', '$2y$10$ciyHnA1quHJoYPRMk5jQ4eSa9OWfGg2.jfyKla2Zp7nQ2zXu1Ukxe', 0, 0);
