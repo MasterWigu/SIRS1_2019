@@ -29,7 +29,7 @@
 
         echo '<div id="header" style="overflow: hidden; padding: 20px 10px; background-color: #f1f1f1;">';
         echo '<div id="header-left" style="background-color: #f1f1f1; float: left; color: #23a9cf;">';
-        echo '<h1 style="text-align:center;"> Welcome ' . $_SESSION['username'] . '! </h1>';
+        echo '<h1 style="text-align:center;"> Welcome ' . htmlspecialchars($_SESSION['username']) . '! </h1>';
         echo '</div>';
 
         echo '<div id="header-right" style="background-color: #f1f1f1; float: right; text-align:center">';
@@ -72,7 +72,7 @@
             $name   = $row['username'];
             $points = $row['points'];
             echo '<tr>';
-            echo '<th><a href="/userInfo.php?name='.$name.'">'. $name . '</a></th>';
+            echo '<th><a href="/userInfo.php?name='.htmlspecialchars($name).'">'. htmlspecialchars($name) . '</a></th>';
             echo '<th>' . $points . '</th>';
             echo '</tr>';
           }

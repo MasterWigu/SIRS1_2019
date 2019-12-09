@@ -16,7 +16,7 @@ echo 'mysql-server mysql-server/root_password_again password toor' | debconf-set
 
 apt-get -y install mysql-server
 
-mysql -u root -ptoor < /home/vagrant/website/setup.sql
+#mysql -u root -ptoor < /home/vagrant/website/setup.sql
 
 
 apt-get -y install software-properties-common
@@ -35,6 +35,9 @@ pip3 install cryptography
 pip3 install mysql-connector
 pip3 install bcrypt
 
+cp -f /home/vagrant/website/interfaces_web.yaml /etc/netplan/60-gateway.yaml
+netplan apply
+
 
 #create certificates
 cd /home/vagrant/
@@ -48,6 +51,7 @@ openssl x509 -req -days 365 -in ca.req -signkey privatekey.pem -out server.crt
 chmod 400 privatekey.pem
 
 
+su vagrant
 cd /home/vagrant/
 mkdir customCert
 cd customCert
@@ -60,5 +64,3 @@ openssl x509 -req -days 365 -in ca.req -signkey privatekey.pem -out server.crt
 cp -f /home/vagrant/website/customServer.py /home/vagrant/customCert/customServer.py
 python3 /home/vagrant/customCert/customServer.py &
 
-cp -f /home/vagrant/website/interfaces_web.yaml /etc/netplan/60-gateway.yaml
-netplan apply

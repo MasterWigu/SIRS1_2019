@@ -33,7 +33,7 @@ session_start();
 
           echo '<div id="header" style="overflow: hidden; padding: 20px 10px; background-color: #f1f1f1;">';
           echo '<div id="header-left" style="background-color: #f1f1f1; float: left; color: #23a9cf;">';
-          echo '<h1 style="text-align:center;"> Checking ' . $name .'</h1>';
+          echo '<h1 style="text-align:center;"> Checking ' . htmlspecialchars($name) .'</h1>';
           echo '</div>';
 
           echo '<div id="header-right" style="background-color: #f1f1f1; float: right; text-align:center">';
@@ -45,7 +45,12 @@ session_start();
           if ($name == $_SESSION['username'] || $perm == 0) {
             echo '<h2 style="text-align:center;color: olivedrab"> Submitted vulnerabilities </h2>';
 
-            if ($stmt = $connection->prepare('SELECT * FROM user')) {
+            if ($stmt = $connection->prepare('SELECT * FROM attack WHERE username=?')) {
+              if (!$stmt->bind_param("s", $nameHandler)) {
+                echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+              }
+              $nameHandler = $name;
+
               if (!$stmt->execute()) {
                 echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
               }

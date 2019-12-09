@@ -23,7 +23,7 @@
 
         echo '<div id="header" style="overflow: hidden; padding: 20px 10px; background-color: #f1f1f1;">';
         echo '<div id="header-left" style="background-color: #f1f1f1; float: left; color: #23a9cf;">';
-        echo '<h1 style="text-align:center;"> ' . $_SESSION['username'] . ' </h1>';
+        echo '<h1 style="text-align:center;"> ' . htmlspecialchars($_SESSION['username']) . ' </h1>';
         echo '</div>';
 
         echo '<div id="header-right" style="background-color: #f1f1f1; float: right; text-align:center">';
@@ -48,9 +48,9 @@
           while($row = $result->fetch_assoc()){
             $name   = $row['username'];
             echo '<tr>';
-            echo '<th>'. $name . '</a></th>';
-            echo '<th><a href="/promoteRedirect.php?name='.$name.'"> Promote </th>';
-            echo '<th><a href="/demoteRedirect.php?name='.$name.'"> Demote </th>';
+            echo '<th>'. htmlspecialchars($name) . '</a></th>';
+            echo '<th><a href="/promoteRedirect.php?name='.htmlspecialchars($name).'"> Promote </th>';
+            echo '<th><a href="/demoteRedirect.php?name='.htmlspecialchars($name).'"> Demote </th>';
             echo '</tr>';
           }
         } else {

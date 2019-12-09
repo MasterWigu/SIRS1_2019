@@ -16,13 +16,13 @@ session_start();
           if ( !$connection ) {
               die ('Connection failed: ' . mysqli_connect_error());
           }
-          $name = $_GET['name'];
+          $name = htmlspecialchars($_GET['name']);
 
           if ($stmt = $connection->prepare('SELECT permissions FROM user WHERE username=?')) {
             if (!$stmt->bind_param('s', $userHandler)){
               echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
             }
-            $userHandler = $_SESSION['username'];
+            $userHandler = htmlspecialchars($_SESSION['username']);
             if (!$stmt->execute()) {
               echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
             }
@@ -38,7 +38,7 @@ session_start();
               if(!$stmt->bind_param('is', $aux = 1, $nameHandler)){
                 echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
               }
-              $nameHandler = $_GET['name'];
+              $nameHandler = htmlspecialchars($_GET['name']);
               if (!$stmt->execute()) {
                 echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
               }

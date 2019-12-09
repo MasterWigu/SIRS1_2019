@@ -25,7 +25,7 @@ with open("privatekey.pem", "rb") as key_file:
 serverSocket = socket(AF_INET, SOCK_STREAM)
 serverSocket.bind(('', 4347))
 serverSocket.listen(10)
-setdefaulttimeout(5)
+setdefaulttimeout(2)
 
 def new_client(clientSock, addr):
 	try:

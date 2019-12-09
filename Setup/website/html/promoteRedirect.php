@@ -32,8 +32,6 @@ session_start();
             
           /* Check true leader's password ?*/
           if ($perm == 0) {
-            print_r($name);
-
             if ($stmt = $connection->prepare('UPDATE user SET permissions=? WHERE username=?')) {
               if(!$stmt->bind_param('is', $aux = 0, $nameHandler)){
                 echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
