@@ -23,8 +23,8 @@ def sendVuln(user, password, fingerprint, description):
 	#RECEIVE CERTIFICATE
 	message = clientSocket.recv(4096)
 	if (message[:10].decode() != "CRT_SEND.."):
-		print("AAAAAA")
-		return -1 #TODO
+		print("Error receiving the certificate")
+		return -1
 	cert = x509.load_pem_x509_certificate(message[10:], default_backend())
 	public_key = cert.public_key()
 
@@ -42,13 +42,13 @@ def sendVuln(user, password, fingerprint, description):
 	#RECEIVE SYMKEY ACK
 	message = clientSocket.recv(4096)
 	if (message[:10].decode() != "SYM_ACK..."):
-		print("BBBBB")
-		return -1 #TODO
+		print("Error receiving the symkey ack")
+		return -2
 
 	message = f.decrypt(message[10:])
 	if (message.decode() != "SYM_ACK2.."):
-		print("CCCCC")
-		return -1 #TODO
+		print("Error receiving the symkey ack")
+		return -3
 
 
 	#SEND LOGIN REQUEST
@@ -61,16 +61,16 @@ def sendVuln(user, password, fingerprint, description):
 	#RECEIVE LOGIN RESPONSE
 	message = clientSocket.recv(4096)
 	if (message[:10].decode() == "LOG_WUSER."):
-		print("Wrong user")
-		return -1 #TODO
+		print("User not found")
+		return -4
 
 	if (message[:10].decode() == "LOG_WPASS."):
 		print("Wrong password")
-		return -1 #TODO
+		return -5
 
 	if (message[:10].decode() != "LOG_CORREC" or f.decrypt(message[10:]).decode() != ("LOG_CORRE2"+user)):
-		print("RIP")
-		return -1 #TODO
+		print("Error making login")
+		return -6
 
 
 	#SEND VULNERABILITY
@@ -82,21 +82,19 @@ def sendVuln(user, password, fingerprint, description):
 	#RECEIVE VULN RESPONSE
 	message = clientSocket.recv(4096)
 	if (message[:10].decode() == "VUL_DUPLIC"):
-		print("Error: Duplicate vulnerability for user "+ user + ".")
-		return -1 #TODO
+		print("This vulnerability was already submitted for user "+ user + ", exiting.")
+		return -7
 
 	if (message[:10].decode() == "VUL_ERROR."):
-		print("Error submitting")
-		return -1 #TODO
+		print("Error submitting submitting vulnerability")
+		return -8
 
 	if (message[:10].decode() != "VUL_ACCEPT"):
-		print("RIP")
-		return -1 #TODO
+		print("Error submitting submitting vulnerability")
+		return -9
 
 	msg = f.decrypt(message[10:]).decode()
 	l1 = msg.split("points:")
 
-	print("DONE, you ("+user+") have now "+l1[1]+" points.")
-
-	print("\n\n")
+	print("Vulnerability submitted, you ("+user+") have now "+l1[1]+" points.\n")
 	return 0
