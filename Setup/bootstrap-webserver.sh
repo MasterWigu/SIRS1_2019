@@ -16,7 +16,7 @@ echo 'mysql-server mysql-server/root_password_again password toor' | debconf-set
 
 apt-get -y install mysql-server
 
-#mysql -u root -ptoor < /home/vagrant/website/setup.sql
+mysql -u root -ptoor < /home/vagrant/website/setup.sql
 
 
 apt-get -y install software-properties-common

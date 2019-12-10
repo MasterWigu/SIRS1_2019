@@ -45,7 +45,7 @@ session_start();
           if ($name == $_SESSION['username'] || $perm == 0) {
             echo '<h2 style="text-align:center;color: olivedrab"> Submitted vulnerabilities </h2>';
 
-            if ($stmt = $connection->prepare('SELECT * FROM attack WHERE username=?')) {
+            if ($stmt = $connection->prepare('SELECT * FROM attack WHERE username=? ORDER BY submit_time DESC')) {
               if (!$stmt->bind_param("s", $nameHandler)) {
                 echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
               }
