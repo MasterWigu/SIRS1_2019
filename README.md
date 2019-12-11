@@ -47,18 +47,23 @@ When logged in just enter the command to initialize the interface:
  Interface
 After initializing the interface Xfce, open the Firefox app and open the web site https://192.168.50.10. This will open the scoreboard web interface.
 
-After opening the website should be able to create new users, promote/demote users do leaders, if the user is already a leader. And other functionalities of the website.
 
-If the client wants do submit a vulnerability, it need to install angr and cryptography which is used in our protocol. Run the following command:
+After logging in, the user should be able to see his/her submitted vulnerabilities and see the number of points of every user of the scoreboard. If the user is a leader, he/she can also see the submitted vulnerabilites of every user and promote/demote other users to the rank of leader.
+There is already one leader with user: **admin** and password: **root**.
+
+
+If the client wants to submit a vulnerability, it is needed to install angr and cryptography in a python virtual envirovment (the virtual envirovment is recommended by angr). Run the following command:
 ```bash
 mkvirtualenv --python=$(which python3) angr && python3 -m pip install angr cryptography
 ```
-After the installation, to run a the vulnerability detector simply run:
+If your analysing program needs another python package, you can install it now.
+
+After the installation, to run the vulnerability detector and submit the vulnerability simply run:
 ```bash
 python3 VulnDetector.py
 ```
-Once the program starts input the angr launch file. An input program we provided is `angrVuln2`. Just input the name of the angr file you want. Note that the angr file must have a main function that returns the fingerprint. both the angr file and the binary that is to be analysed must be in the same folder as the `VulnDetector.py` and the `customClient.py`.
-The just insert the explaination for the vulnerbility found and the username and password for the user.
+Once the program starts input the angr launch file. An input program we provided is `angrVuln2`. Just input the name of the angr file you want. Note that the angr file must have a main() function that returns the fingerprint. both the angr file and the binary that is to be analysed must be in the same folder as the `VulnDetector.py` and the `customClient.py`.
+Then just insert the explaination for the vulnerbility found and the username and password for the user.
 
 After the submission of the vulnerability, you can check that the vulnerability was submitted on the website.
 
