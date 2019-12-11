@@ -39,13 +39,26 @@ vagrant up --provision
 
 After this, when the machines are up, it will open a virtual machine that is the client, and will ask for the credentials:
 login: **vagrant** and password: **vagrant**.
-When logged in just enter the command to initialize the interface
+When logged in just enter the command to initialize the interface:
 ```bash
-cd client
-```
-and then
-```bash
-./gui.sh
+./client/gui.sh
 ```
 
-After initializing the interface Xfce, open the Firefox app and open the web site **192.168.50.10**. This will open the scoreboard web interface.
+ Interface
+After initializing the interface Xfce, open the Firefox app and open the web site https://192.168.50.10. This will open the scoreboard web interface.
+
+After opening the website should be able to create new users, promote/demote users do leaders, if the user is already a leader. And other functionalities of the website.
+
+If the client wants do submit a vulnerability, it need to install angr and cryptography which is used in our protocol. Run the following command:
+```bash
+mkvirtualenv --python=$(which python3) angr && python3 -m pip install angr cryptography
+```
+After the installation, to run a the vulnerability detector simply run:
+```bash
+python3 VulnDetector.py
+```
+Once the program starts input the angr launch file. An input program we provided is `angrVuln2`. Just input the name of the angr file you want. Note that the angr file must have a main function that returns the fingerprint. both the angr file and the binary that is to be analysed must be in the same folder as the `VulnDetector.py` and the `customClient.py`.
+The just insert the explaination for the vulnerbility found and the username and password for the user.
+
+After the submission of the vulnerability, you can check that the vulnerability was submitted on the website.
+
