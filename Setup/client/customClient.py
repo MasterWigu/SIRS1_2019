@@ -5,6 +5,7 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.fernet import Fernet
+import hashlib
 
 setdefaulttimeout(3)
 
@@ -74,6 +75,9 @@ def sendVuln(user, password, fingerprint, description):
 
 	#SEND VULNERABILITY
 	message = "fing:"+fingerprint + ";desc:"+description+";"
+	import hashlib
+	hash_object = hashlib.sha256(message.encode())
+	message += "hash:"+hash_object.hexdigest()+";"
 	message = message.encode()
 	token = f.encrypt(message)
 	clientSocket.send(b"VUL_SUBMIT" + token)
@@ -87,6 +91,10 @@ def sendVuln(user, password, fingerprint, description):
 	if (message[:10].decode() == "VUL_ERROR."):
 		print("Error submitting submitting vulnerability")
 		return -8
+
+	if (message[:10].decode() == "VUL_HASHER"):
+		print("Error submitting submitting vulnerability: Hashes don't match")
+		return -9
 
 	if (message[:10].decode() != "VUL_ACCEPT"):
 		print("Error submitting submitting vulnerability")

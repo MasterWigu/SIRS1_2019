@@ -11,6 +11,7 @@ import mysql.connector
 from mysql.connector import Error
 from mysql.connector import errorcode
 from time import strftime
+import hashlib
 
 
 
@@ -120,13 +121,23 @@ def new_client(clientSock, addr):
 			return
 		message = f.decrypt(message[10:])
 		message = message.decode()
-		s1 = message.replace("fing:", "").replace("desc:", "").split(";")
+		s1 = message.replace("fing:", "").replace("desc:", "").replace("hash:", "").split(";")
 		fingerprint = s1[0]
 		description = s1[1]
-		points = 0
+		mhash = s1[2]
+		mr = "fing:"+fingerprint + ";desc:"+description+";"
+		if (mhash != hashlib.sha256(mr.encode()).hexdigest()):
+			logFile = open("customServer.log", "a+")
+			logFile.write(strftime("%Y/%m/%d %H:%M:%S")+ " ERROR: Wrong hash recieved when receiving vulnerability\n")
+			logFile.close()
+			message = b"VUL_HASHER"
+			token = f.encrypt(b"VUL_HASHER")
+			clientSock.send(message + token)
+			return
+
 
 		#SUBMIT VULNERABILITY IN DATABASE
-
+		points = 0
 		try:
 			conn2 = mysql.connector.connect(host="localhost",user="root",passwd="toor",database="AVD_SCORE")
 			conn2.autocommit = False
@@ -149,7 +160,6 @@ def new_client(clientSock, addr):
 			sql = "INSERT INTO attack (fingerprint, explanation, submit_time, username)  VALUES (%s, %s, NOW(), %s)"
 			adr = (fingerprint, description ,user )
 			cursor.execute(sql, adr)
-			print("BBB")
 			#Commit your changes
 			conn2.commit()
 
