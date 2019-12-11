@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 apt-get update
-apt-get -y install fwbuilder
 
 #enable forwarding
 sysctl -w net.ipv4.ip_forward=1
